@@ -7,6 +7,8 @@ affiliation: Slop University School of Invented Disciplines
 role: tutor
 email: idris.fenn@slop.university
 contact: Ask during a studio, or email when a question can't wait until the next one.
+photo: ./idris-fenn.svg
+photoAlt: An abstract ink-stroke mark generated for this profile — two crossing strokes meeting at a point, not a photograph.
 ---
 
 Idris runs the middle studios --- the ones where a working instrument from the

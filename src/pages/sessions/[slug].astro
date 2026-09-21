@@ -18,7 +18,7 @@ const { Content } = await render(session);
 ---
 
 <ContentLayout
-  title={`Week ${session.data.week} ${sessionLabels.singular}: ${session.data.title}`}
+  title={`${sessionLabels.singular} ${session.data.week}: ${session.data.title}`}
   description={session.data.description}
   {...siteConfig}
 >

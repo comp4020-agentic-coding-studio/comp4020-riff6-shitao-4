@@ -12,8 +12,22 @@ import { sessionLabels, siteConfig } from "../../site-config";
   <p>
     Twelve studios, each one working mechanism at a time — a pointer signal,
     a constraint, a decay, a second hand on the same instrument — building
-    toward the single idea the semester closes on: 无法而法，乃为至法, the
-    method of no method is the perfect method.
+    toward the single idea the semester closes on:
   </p>
+  <p class="studio-motto">无法而法，乃为至法</p>
+  <p class="studio-motto-gloss">the method of no method is the perfect method</p>
   <SessionsGrid />
 </ContentLayout>
+
+<style>
+  .studio-motto {
+    margin-block-end: 0.25em;
+    font-size: 1.25em;
+  }
+
+  .studio-motto-gloss {
+    margin-block-start: 0;
+    color: var(--at-text-secondary);
+    font-size: var(--at-font-size-sm);
+  }
+</style>

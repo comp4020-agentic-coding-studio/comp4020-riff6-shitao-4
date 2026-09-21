@@ -1,9 +1,27 @@
 ---
+import { getPublishedCollection } from "astro-course-university/content";
 import Card from "astro-theme-university/components/Card.astro";
 import CardGrid from "astro-theme-university/components/CardGrid.astro";
 import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import { withBase } from "astro-theme-university/url";
 import { courseMeta } from "../course-config";
+import { formatCourseDate } from "../lib/dates";
 import { sessionLabels, siteConfig } from "../site-config";
+
+const [sessions, lectures, assessments] = await Promise.all([
+  getPublishedCollection("sessions"),
+  getPublishedCollection("lectures"),
+  getPublishedCollection("assessments"),
+]);
+
+const timeline = Array.from({ length: 12 }, (_, index) => index + 1).map((week) => ({
+  week,
+  session: sessions.find((entry) => entry.data.week === week),
+  lecture: lectures.find((entry) => entry.data.week === week),
+  due: assessments
+    .filter((entry) => entry.data.week === week)
+    .sort((a, b) => a.data.due.getTime() - b.data.due.getTime()),
+}));
 ---
 
 <ContentLayout
@@ -37,8 +55,73 @@ import { sessionLabels, siteConfig } from "../site-config";
     someone else's fingers are on it.
   </p>
 
+  <h2>What you will be able to do</h2>
+  <p>
+    By the end of the semester, you will be able to:
+  </p>
+  <ol class="course-outcomes">
+    {courseMeta.learningOutcomes.map((outcome) => <li>{outcome}</li>)}
+  </ol>
+
+  <h2>Course timeline</h2>
+  <p>
+    Twelve weeks, one studio each. Lectures land in the odd weeks, just before
+    the studios that need them; the two crit weeks are where work meets
+    someone else's hands.
+  </p>
+  <table class="course-timeline">
+    <thead>
+      <tr>
+        <th scope="col">Week</th>
+        <th scope="col">Lecture</th>
+        <th scope="col">{sessionLabels.singular}</th>
+        <th scope="col">Due</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        timeline.map((row) => (
+          <tr>
+            <th scope="row">{row.week}</th>
+            <td>
+              {row.lecture ? (
+                <a href={withBase(`/lectures/${row.lecture.id}/`)}>{row.lecture.data.title}</a>
+              ) : (
+                <span class="course-timeline-empty">—</span>
+              )}
+            </td>
+            <td>
+              {row.session ? (
+                <a href={withBase(`/sessions/${row.session.id}/`)}>{row.session.data.title}</a>
+              ) : (
+                <span class="course-timeline-empty">—</span>
+              )}
+            </td>
+            <td>
+              {row.due.length === 0 ? (
+                <span class="course-timeline-empty">—</span>
+              ) : (
+                row.due.map((assessment) => (
+                  <p class="course-timeline-due">
+                    <a href={withBase(`/assessments/${assessment.id}/`)}>
+                      {assessment.data.title}
+                    </a>
+                    <small>{formatCourseDate(assessment.data.due)} · {assessment.data.weight}%</small>
+                  </p>
+                ))
+              )}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
   <h2>Where to go next</h2>
   <CardGrid columns={2}>
+    <Card title="Lectures" href="/lectures/">
+      <p>What's covered each week, and which studio it feeds into.</p>
+    </Card>
     <Card title={sessionLabels.plural} href="/sessions/">
       <p>The weekly schedule and what happens in each teaching session.</p>
     </Card>
@@ -65,7 +148,33 @@ import { sessionLabels, siteConfig } from "../site-config";
     padding: 0.25rem 0.65rem;
     border-radius: 999px;
     color: var(--at-text-secondary);
-    background: var(--at-bg-alt);
+    background: var(--at-bg-elevated);
+    border: 1px solid var(--at-divider);
     font-size: 0.9rem;
+  }
+
+  .course-outcomes li {
+    margin-block-end: 0.5rem;
+  }
+
+  .course-timeline {
+    width: 100%;
+  }
+
+  .course-timeline-empty {
+    color: var(--at-text-muted);
+  }
+
+  .course-timeline-due {
+    margin-block: 0 0.5rem;
+  }
+
+  .course-timeline-due:last-child {
+    margin-block-end: 0;
+  }
+
+  .course-timeline-due small {
+    display: block;
+    color: var(--at-text-secondary);
   }
 </style>

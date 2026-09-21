@@ -19,6 +19,7 @@ export const slopCourseMetaSchema = z
     endDate: z.iso.date(),
     description: z.string().trim().min(80).max(300),
     tags: z.array(z.string().trim().min(2).max(24)).min(1).max(3),
+    learningOutcomes: z.array(z.string().trim().min(20).max(300)).min(4).max(8),
   })
   .superRefine((course, ctx) => {
     const codeLevel = Number(course.code.at(4));
@@ -59,4 +60,12 @@ export const courseMeta = slopCourseMetaSchema.parse({
     "ink: a dozen weeks, one continuous idea per week, each build tested at the " +
     "keyboard rather than trusted from a screenshot, and defended in a crit.",
   tags: ["creative coding", "critique", "interaction"],
+  learningOutcomes: [
+    "Build a small interactive instrument that reads gesture as more than a position, mapping motion over time onto the mark it makes.",
+    "Impose a single deliberate constraint on your own work, hold it, and defend what it costs by demonstrating the instrument with it removed.",
+    "Design state that changes without input, so that waiting becomes part of how the instrument is played.",
+    "Put a working build under someone else's hands and diagnose the gap between what felt right to its author and what reads as broken to a stranger.",
+    "Give and take critique that changes a decision, and show the change in the work that follows it.",
+    "Stage an instrument to run unattended for a viewer who gets no explanation and no help.",
+  ],
 }) satisfies CourseMetaInput;

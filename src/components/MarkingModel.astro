@@ -1,12 +1,18 @@
 ---
+interface GradeLevel {
+  grade: "P" | "CR" | "D" | "HD";
+  description: string;
+}
+
 interface WeightedMarking {
   mode: "weighted";
-  criteria: { name: string; weight: number }[];
+  criteria: { name: string; weight: number; levels?: GradeLevel[] }[];
 }
 
 interface HolisticMarking {
   mode: "holistic";
   description: string;
+  levels?: GradeLevel[];
 }
 
 interface Props {
@@ -19,15 +25,61 @@ const { marking } = Astro.props;
 <section aria-labelledby="how-marked">
   <h2 id="how-marked">How it is marked</h2>
   {marking.mode === "holistic" ? (
-    <p>{marking.description}</p>
+    <>
+      <p>{marking.description}</p>
+      {marking.levels && (
+        <dl class="rubric">
+          {marking.levels.map((level) => (
+            <>
+              <dt>{level.grade}</dt>
+              <dd>{level.description}</dd>
+            </>
+          ))}
+        </dl>
+      )}
+    </>
   ) : (
-    <table>
-      <thead><tr><th scope="col">Criterion</th><th scope="col">Weight</th></tr></thead>
-      <tbody>
-        {marking.criteria.map((criterion) => (
-          <tr><td>{criterion.name}</td><td>{criterion.weight}%</td></tr>
-        ))}
-      </tbody>
-    </table>
+    <>
+      <table>
+        <thead><tr><th scope="col">Criterion</th><th scope="col">Weight</th></tr></thead>
+        <tbody>
+          {marking.criteria.map((criterion) => (
+            <tr><td>{criterion.name}</td><td>{criterion.weight}%</td></tr>
+          ))}
+        </tbody>
+      </table>
+      {marking.criteria.map((criterion) => criterion.levels && (
+        <>
+          <h3>{criterion.name}</h3>
+          <dl class="rubric">
+            {criterion.levels.map((level) => (
+              <>
+                <dt>{level.grade}</dt>
+                <dd>{level.description}</dd>
+              </>
+            ))}
+          </dl>
+        </>
+      ))}
+    </>
   )}
 </section>
+
+<style>
+  .rubric {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1rem;
+    margin-block: 0 1.5rem;
+  }
+
+  .rubric dt {
+    font-weight: 600;
+    color: var(--at-accent);
+  }
+
+  .rubric dd {
+    margin: 0;
+    color: var(--at-text-secondary);
+  }
+</style>

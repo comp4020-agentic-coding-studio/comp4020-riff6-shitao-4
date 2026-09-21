@@ -7,6 +7,8 @@ affiliation: Slop University School of Invented Disciplines
 role: convenor
 email: marisol.quaye@slop.university
 contact: Email for course-level questions; use the weekly studio for feedback on work in progress.
+photo: ./marisol-quaye.svg
+photoAlt: An abstract ink-stroke mark generated for this profile — a single curved stroke held inside a constraint ring, not a photograph.
 ---
 
 Marisol built the first version of this course after a decade of shipping
