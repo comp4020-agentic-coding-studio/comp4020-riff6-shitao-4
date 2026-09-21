@@ -27,9 +27,9 @@ export const siteConfig = defineSiteConfig({
     { text: "Policies", href: "/policies/" },
   ],
 
-  // Image-free by design: the starter's hero banner and per-person portraits
-  // are exactly the kind of static picture the course argues against — an
-  // instrument earns its page through what it does. See PROCESS.md for the
-  // fuller argument and how it was verified.
+  // No hero banner and no portraits: the starter's static pictures are what
+  // the course argues against — an instrument earns its page through what it
+  // does. People carry generated stroke marks instead, which is a deliberate
+  // narrowing of that rule rather than an exception to it. See PROCESS.md.
   licence: "CC-BY-NC-SA-4.0",
 });
